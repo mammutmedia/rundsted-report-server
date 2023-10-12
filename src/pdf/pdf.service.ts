@@ -14,17 +14,16 @@ export class PdfService {
     private buildPdfService: BuildPdfService,
     private s3Service: S3Service,
   ) {}
-  createPdf(data: CreateReportDto) {
-    console.log('This action uploads the pdf to S3');
+  async createPdf(data: CreateReportDto) {
     /* clean data Service */
     const cleanedData: CleanDataDto = this.cleanDataService.cleanData(data);
     /* create Charts Service */
     const charts = this.createChartsService.createCharts(cleanedData);
+    console.log('charts finished');
     /* Build PDf Service */
     /* const pdf = this.buildPdfService.buildPdf(charts); */
     /* Upload PDF to S3 Service */
     /* this.s3Service.uploadPdf(data); */
-    console.log(cleanedData);
     return 'This action returns the pdf';
   }
 }
