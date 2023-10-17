@@ -6,6 +6,7 @@ import { CreateChartsService } from './services/create-charts/create-charts.serv
 import { CleanDataService } from './services/clean-data/clean-data.service';
 import { PdfService } from './pdf.service';
 import { ChartModule } from './services/create-charts/create-charts.module';
+import { Page5Service } from './services/build-pdf/pages/page5.service';
 
 @Module({
   controllers: [PdfController],
@@ -15,6 +16,7 @@ import { ChartModule } from './services/create-charts/create-charts.module';
     CreateChartsService,
     BuildPdfService,
     S3Service,
+    Page5Service,
   ],
   imports: [ChartModule],
 })

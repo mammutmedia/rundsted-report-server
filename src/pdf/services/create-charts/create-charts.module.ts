@@ -3,6 +3,7 @@ import {
   BarChartStrategy,
   ChartFactory,
   LineChartStrategy,
+  RadarChartStrategy,
 } from './chart.factory';
 
 @Module({
@@ -19,10 +20,17 @@ import {
         return new ChartFactory(new LineChartStrategy());
       },
     },
+    {
+      provide: 'RadarChartFactory',
+      useFactory: () => {
+        return new ChartFactory(new RadarChartStrategy());
+      },
+    },
   ],
   exports: [
     'BarChartFactory',
     'LineChartFactory',
+    'RadarChartFactory',
   ] /* needed because it allows the providers to be used in other modules that import the current module */,
 })
 export class ChartModule {}

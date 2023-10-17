@@ -1,26 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { ChartConfiguration } from 'chart.js';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 /* import filesystem */
 import * as fs from 'fs';
 
 interface IChartStrategy {
-  create(data: ChartData): Promise<string>;
+  create(data: ChartData, options: ChartOptions): Promise<string>;
 }
 
 class BaseChartStrategy implements IChartStrategy {
   constructor(private type: string) {}
 
-  async create(data: ChartData): Promise<string> {
+  async create(data: ChartData, options: ChartOptions): Promise<string> {
     const configuration: ChartConfiguration = {
       type: this.type as any,
       data,
+      options,
     };
 
     const chartJSNodeCanvas = new ChartJSNodeCanvas({
-      width: 800, // Set the width to your desired value
-      height: 600, // Set the height to your desired value
-      backgroundColour: '#ffffff', // Set the background color if needed
+      width: 800,
+      height: 600,
+      backgroundColour: '#ffffff',
     });
 
     const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
@@ -44,11 +45,16 @@ export class LineChartStrategy extends BaseChartStrategy {
     super('line');
   }
 }
+export class RadarChartStrategy extends BaseChartStrategy {
+  constructor() {
+    super('radar');
+  }
+}
 
 export class ChartFactory {
   constructor(private strategy: IChartStrategy) {}
 
-  async createChart(data: ChartData): Promise<string> {
-    return await this.strategy.create(data);
+  async createChart(data: ChartData, options: ChartOptions): Promise<string> {
+    return await this.strategy.create(data, options);
   }
 }

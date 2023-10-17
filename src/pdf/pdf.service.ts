@@ -21,7 +21,7 @@ export class PdfService {
     const charts = this.createChartsService.createCharts(cleanedData);
     console.log('charts finished');
     /* Build PDf Service */
-    /* const pdf = this.buildPdfService.buildPdf(charts); */
+    const pdf = this.buildPdfService.buildPdf();
     /* Upload PDF to S3 Service */
     /* this.s3Service.uploadPdf(data); */
     return 'This action returns the pdf';
