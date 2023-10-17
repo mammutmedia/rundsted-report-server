@@ -18,10 +18,9 @@ export class PdfService {
     /* clean data Service */
     const cleanedData: CleanDataDto = this.cleanDataService.cleanData(data);
     /* create Charts Service */
-    const charts = this.createChartsService.createCharts(cleanedData);
-    console.log('charts finished');
+    const charts = await this.createChartsService.createCharts(cleanedData);
     /* Build PDf Service */
-    const pdf = this.buildPdfService.buildPdf();
+    const pdf = this.buildPdfService.buildPdf(charts);
     /* Upload PDF to S3 Service */
     /* this.s3Service.uploadPdf(data); */
     return 'This action returns the pdf';

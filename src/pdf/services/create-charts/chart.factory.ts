@@ -5,13 +5,13 @@ import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import * as fs from 'fs';
 
 interface IChartStrategy {
-  create(data: ChartData, options: ChartOptions): Promise<string>;
+  create(data: ChartData, options: ChartOptions): Promise<Buffer>;
 }
 
 class BaseChartStrategy implements IChartStrategy {
   constructor(private type: string) {}
 
-  async create(data: ChartData, options: ChartOptions): Promise<string> {
+  async create(data: ChartData, options: ChartOptions): Promise<Buffer> {
     const configuration: ChartConfiguration = {
       type: this.type as any,
       data,
@@ -19,9 +19,9 @@ class BaseChartStrategy implements IChartStrategy {
     };
 
     const chartJSNodeCanvas = new ChartJSNodeCanvas({
-      width: 800,
-      height: 600,
-      backgroundColour: '#ffffff',
+      width: 500, //px
+      height: 500, //px
+      backgroundColour: 'transparent',
     });
 
     const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
@@ -30,7 +30,7 @@ class BaseChartStrategy implements IChartStrategy {
       `${directory}chart${new Date().getMilliseconds().toString()}.png`,
       buffer,
     );
-    return buffer.toString('base64');
+    return buffer;
   }
 }
 
@@ -54,7 +54,7 @@ export class RadarChartStrategy extends BaseChartStrategy {
 export class ChartFactory {
   constructor(private strategy: IChartStrategy) {}
 
-  async createChart(data: ChartData, options: ChartOptions): Promise<string> {
+  async createChart(data: ChartData, options: ChartOptions): Promise<Buffer> {
     return await this.strategy.create(data, options);
   }
 }

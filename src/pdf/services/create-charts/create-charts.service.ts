@@ -17,7 +17,7 @@ export class CreateChartsService {
     console.log(data);
     const radarChart = await this.createRadarChart(data);
 
-    return;
+    return { radarChart: radarChart };
   }
 
   private createRadarChart(data) {
@@ -68,12 +68,7 @@ export class CreateChartsService {
       },
       plugins: {
         legend: {
-          position: 'bottom',
-          labels: {
-            font: {
-              size: 14,
-            },
-          },
+          display: false,
         },
       },
     };
