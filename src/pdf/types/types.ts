@@ -7,6 +7,7 @@ type Competence = {
   sum: number;
   skills: Skill;
   averageRating: number;
+  percentage?: number;
 };
 
 type CompetenceData = {

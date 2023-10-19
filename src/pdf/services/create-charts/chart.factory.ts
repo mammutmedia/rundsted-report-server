@@ -5,13 +5,13 @@ import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import * as fs from 'fs';
 
 interface IChartStrategy {
-  create(data: ChartData, options: ChartOptions): Promise<Buffer>;
+  create(data: ChartData, options): Promise<Buffer>;
 }
 
 class BaseChartStrategy implements IChartStrategy {
   constructor(private type: string) {}
 
-  async create(data: ChartData, options: ChartOptions): Promise<Buffer> {
+  async create(data: ChartData, options): Promise<Buffer> {
     const configuration: ChartConfiguration = {
       type: this.type as any,
       data,
@@ -51,10 +51,16 @@ export class RadarChartStrategy extends BaseChartStrategy {
   }
 }
 
+export class DoughnutChartStrategy extends BaseChartStrategy {
+  constructor() {
+    super('doughnut');
+  }
+}
+
 export class ChartFactory {
   constructor(private strategy: IChartStrategy) {}
 
-  async createChart(data: ChartData, options: ChartOptions): Promise<Buffer> {
+  async createChart(data: ChartData, options): Promise<Buffer> {
     return await this.strategy.create(data, options);
   }
 }

@@ -1,0 +1,244 @@
+import { PDFDocument } from 'pdfkit';
+import { Inject, Injectable } from '@nestjs/common';
+import { PageService } from '../page.interface';
+import { ChartFactory } from '../../create-charts/chart.factory';
+import { ChartOptions } from 'chart.js';
+
+@Injectable()
+export class Page6Service {
+  constructor(
+    @Inject('BarChartFactory') private barCharFactory: ChartFactory,
+    @Inject('DoughnutChartFactory') private doughnutChartFactory: ChartFactory,
+  ) {}
+  async addContentToPage(
+    doc: PDFDocument,
+    klientMap: CompetenceData,
+    stakeholderMap: CompetenceData,
+  ) {
+    doc
+      .addPage()
+      .image('./src/pdf/services/build-pdf/pdf/de/page-06.png', 0, 0, {
+        width: 620,
+        height: 842,
+      });
+
+    const barChart = await this.createBarChart(klientMap, stakeholderMap);
+    doc.image(barChart, 50, 655, { width: 425, height: 60 });
+
+    this.enrichMapWithPercentage(klientMap);
+    this.enrichMapWithPercentage(stakeholderMap);
+
+    let yPos = 235;
+    const LINE_HEIGHT = 15;
+    const X_POS_RATING = 330;
+    const X_POS_PERCENTAGE = 370;
+    const X_POS_DELTA = 420;
+    for (const key of Object.keys(klientMap)) {
+      const { averageRating, percentage } = klientMap[key];
+      const delta = 100 - percentage;
+      doc.text(averageRating, X_POS_RATING, yPos);
+      doc.text(percentage, X_POS_PERCENTAGE, yPos);
+      doc.text(delta, X_POS_DELTA, yPos);
+      yPos += LINE_HEIGHT;
+    }
+
+    const doughnut = await this.createDoughnutCharts(klientMap);
+    this.addDoughnutCharts(doc, doughnut, klientMap);
+
+    return;
+  }
+
+  private addDoughnutCharts(
+    doc: PDFDocument,
+    doughnut: Record<string, any>,
+    klientMap: CompetenceData,
+  ) {
+    const Y_POS_FIRST_ROW = 340;
+    const INITIAL_FIRST_ROW_X_POS = 63;
+    const FIRST_MARGIN_BETWEEN_DOUGHNUTS = 200;
+    const firstRowCompetences = [
+      'Problem solving',
+      'Learning Agility',
+      'Digital literacy',
+    ];
+
+    this.addDoughnutChartsAndScores(
+      doc,
+      INITIAL_FIRST_ROW_X_POS,
+      Y_POS_FIRST_ROW,
+      FIRST_MARGIN_BETWEEN_DOUGHNUTS,
+      firstRowCompetences,
+      doughnut,
+      klientMap,
+    );
+
+    const Y_POS_SECOND_ROW = 430;
+    const INITIAL_SECOND_ROW_X_POS = 150;
+    const SECOND_MARGIN_BETWEEN_DOUGHNUTS = 220;
+    const secondRowCompetences = [
+      'Ecosystem-Management',
+      'Enterprising mindset',
+    ];
+
+    this.addDoughnutChartsAndScores(
+      doc,
+      INITIAL_SECOND_ROW_X_POS,
+      Y_POS_SECOND_ROW,
+      SECOND_MARGIN_BETWEEN_DOUGHNUTS,
+      secondRowCompetences,
+      doughnut,
+      klientMap,
+    );
+  }
+
+  private addDoughnutChartsAndScores(
+    doc: PDFDocument,
+    xPos: number,
+    Y_POS: number,
+    MARGIN_BETWEEN_DOUGHNUTS: number,
+    competences: string[],
+    doughnut: Record<string, Buffer>, // Assuming doughnut is a dictionary of Buffers
+    klientMap: CompetenceData,
+  ) {
+    for (let i = 0; i < competences.length; i++) {
+      console.log(`running ${i}`);
+      const competence = competences[i];
+
+      // Add the doughnut chart
+      doc.image(
+        doughnut[competence],
+        xPos + i * MARGIN_BETWEEN_DOUGHNUTS,
+        Y_POS,
+        {
+          width: 50,
+        },
+      );
+
+      // Add the percentage score
+      doc.text(
+        klientMap[competence].percentage + '%',
+        xPos + i * MARGIN_BETWEEN_DOUGHNUTS + 17,
+        Y_POS + 22,
+      );
+    }
+  }
+
+  private async createDoughnutCharts(klientCompetenceMap: CompetenceData) {
+    const doughnutObject: Record<string, any> = {};
+
+    await Promise.all(
+      Object.entries(klientCompetenceMap).map(
+        async ([competence, competenceData]) => {
+          const doughnut = await this.createDoughnutChart(
+            competenceData.percentage,
+          );
+          doughnutObject[competence] = doughnut;
+        },
+      ),
+    );
+
+    return doughnutObject;
+  }
+
+  private async createDoughnutChart(kompetenzPercentage) {
+    const doughnutChartData = {
+      labels: ['Red', 'Blue', 'Yellow'],
+      borderWidth: 1,
+      datasets: [
+        {
+          label: 'My First Dataset',
+          data: [100 - kompetenzPercentage, kompetenzPercentage],
+          backgroundColor: ['rgb(204, 202, 202)', 'rgb(153, 0, 51)'],
+        },
+      ],
+    };
+    const doughnutChartOptions = {
+      cutout: '70%',
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+      elements: {
+        center: {
+          text: 'Red is 2/3 the total numbers',
+          color: '#FF6384', // Default is #000000
+          fontStyle: 'Arial', // Default is Arial
+          sidePadding: 20, // Default is 20 (as a percentage)
+          minFontSize: 20, // Default is 20 (in px), set to false and text will not wrap.
+          lineHeight: 25, // Default is 25 (in px), used for when text wraps
+        },
+      },
+    };
+    return this.doughnutChartFactory.createChart(
+      doughnutChartData,
+      doughnutChartOptions,
+    );
+  }
+
+  private createBarChart(klientMap, stakeholderMap) {
+    const klientAverage = this.calculateAverageOfAverages(klientMap);
+    const stakeholderAverage = this.calculateAverageOfAverages(stakeholderMap);
+    const barChartData = {
+      labels: [''],
+      datasets: [
+        {
+          label: [''],
+          data: [klientAverage],
+          borderColor: ['rgb(87, 87, 87))'],
+          backgroundColor: ['rgb(87, 87, 87)'],
+        },
+        {
+          label: [''],
+          data: [stakeholderAverage],
+          borderColor: ['rgb(231, 68, 60)'],
+          backgroundColor: ['rgb(231, 68, 60)'],
+        },
+      ],
+    };
+    const barChartOptions: ChartOptions = {
+      /* categoryPercentage: 0.5, */
+      /* barPercentage: 1, */
+      indexAxis: 'y',
+      scales: {
+        y: {
+          ticks: {
+            font: {
+              size: 21,
+            },
+          },
+        },
+        x: {
+          min: 1,
+          max: 5,
+        },
+      },
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+    };
+
+    return this.barCharFactory.createChart(barChartData, barChartOptions);
+  }
+
+  private calculateAverageOfAverages(data: CompetenceData) {
+    let totalAverage = 0;
+    let numCompetences = 0;
+
+    for (const competenceData of Object.values(data)) {
+      totalAverage += competenceData.averageRating;
+      numCompetences++;
+    }
+
+    const averageOfAverages = totalAverage / numCompetences;
+    return averageOfAverages;
+  }
+
+  private enrichMapWithPercentage(map: CompetenceData) {
+    for (const competenceData of Object.values(map)) {
+      competenceData.percentage = competenceData.averageRating / 0.05;
+    }
+  }
+}
