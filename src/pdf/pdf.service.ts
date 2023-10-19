@@ -1,5 +1,4 @@
 import { BuildPdfService } from './services/build-pdf/build-pdf.service';
-import { CreateChartsService } from './services/create-charts/create-charts.service';
 import { CleanDataService } from './services/clean-data/clean-data.service';
 import { Injectable } from '@nestjs/common';
 import { S3Service } from './services/s3/s3.service';
@@ -10,7 +9,6 @@ import { CleanDataDto } from './dtos/cleanData.dto';
 export class PdfService {
   constructor(
     private cleanDataService: CleanDataService,
-    private createChartsService: CreateChartsService,
     private buildPdfService: BuildPdfService,
     private s3Service: S3Service,
   ) {}

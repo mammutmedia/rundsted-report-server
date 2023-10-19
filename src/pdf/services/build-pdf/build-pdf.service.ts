@@ -1,15 +1,21 @@
+import { Page8Service } from './pages/page8.service';
+import { Page7Service } from './pages/page7.service';
 import { Injectable } from '@nestjs/common';
 import * as PDFDocument from 'pdfkit';
 import * as fs from 'fs';
 import { CleanDataDto } from 'src/pdf/dtos/cleanData.dto';
 import { Page5Service } from './pages/page5.service';
 import { Page6Service } from './pages/page6.service';
+import { Page9Service } from './pages/page9.service';
 
 @Injectable()
 export class BuildPdfService {
   constructor(
     private readonly page5Service: Page5Service,
     private readonly page6Service: Page6Service,
+    private readonly page7Service: Page7Service,
+    private readonly page8Service: Page8Service,
+    private readonly page9Service: Page9Service,
   ) {}
 
   private addImageToPage(doc: PDFDocument, imagePath: string, page?: number) {
@@ -48,6 +54,9 @@ export class BuildPdfService {
     // Add the pages to the document using the respective services
     await this.page5Service.addContentToPage(doc, klientMap, stakeholderMap);
     await this.page6Service.addContentToPage(doc, klientMap, stakeholderMap);
+    await this.page7Service.addContentToPage(doc, klientMap, stakeholderMap);
+    await this.page8Service.addContentToPage(doc, klientMap, stakeholderMap);
+    await this.page9Service.addContentToPage(doc, klientMap, stakeholderMap);
 
     // Finalize the PDF and end the stream
     doc.end();
