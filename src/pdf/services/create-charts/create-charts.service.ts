@@ -14,7 +14,6 @@ export class CreateChartsService {
   ) {}
 
   async createCharts(data: CleanDataDto) {
-    console.log(data);
     const radarChart = await this.createRadarChart(data);
 
     return { radarChart: radarChart };
@@ -24,8 +23,6 @@ export class CreateChartsService {
     const { klient, stakeholder } = data;
     const klientMap = this.transformToMap(klient);
     const stakeholderMap = this.transformToMap(stakeholder);
-
-    console.log(klientMap, stakeholderMap);
     const radarChartData = {
       labels: ['', '', '', '', ''],
       datasets: [
