@@ -148,7 +148,7 @@ export class Page6Service {
         {
           label: 'My First Dataset',
           data: [100 - kompetenzPercentage, kompetenzPercentage],
-          backgroundColor: ['rgb(204, 202, 202)', 'rgb(153, 0, 51)'],
+          backgroundColor: ['rgb(56, 45, 115)', 'rgb(153, 0, 51)'],
         },
       ],
     };
@@ -185,14 +185,12 @@ export class Page6Service {
         {
           label: [''],
           data: [klientAverage],
-          borderColor: ['rgb(87, 87, 87))'],
-          backgroundColor: ['rgb(87, 87, 87)'],
+          backgroundColor: 'rgb(56, 45, 115)',
         },
         {
           label: [''],
           data: [stakeholderAverage],
-          borderColor: ['rgb(231, 68, 60)'],
-          backgroundColor: ['rgb(231, 68, 60)'],
+          backgroundColor: 'rgb(213, 69, 60)',
         },
       ],
     };

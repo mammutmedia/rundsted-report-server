@@ -11,6 +11,13 @@ export class Page7Service {
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
   ) {
+    doc
+      .addPage()
+      .image('./src/pdf/services/build-pdf/pdf/de/page-07.png', 0, 0, {
+        width: 620,
+        height: 842,
+      });
+
     const COMPETENZ_1 = 'Problem solving';
     const COMPETENZ_2 = 'Learning Agility';
 
@@ -24,17 +31,20 @@ export class Page7Service {
       stakeholderMap[COMPETENZ_2].skills,
     );
 
-    const chartProblemSolving = this.chartUtilityService.createBarChart(
+    const chartProblemSolving = await this.chartUtilityService.createBarChart(
       problemSolvingData.labels,
       problemSolvingData.klientSkills,
       problemSolvingData.stakeholderSkills,
     );
 
-    const chartLearningAgility = this.chartUtilityService.createBarChart(
+    const chartLearningAgility = await this.chartUtilityService.createBarChart(
       learningAgilityData.labels,
       learningAgilityData.klientSkills,
       learningAgilityData.stakeholderSkills,
     );
+
+    doc.image(chartProblemSolving, 90, 290, { width: 450, height: 150 });
+    doc.image(chartLearningAgility, 90, 570, { width: 450, height: 150 });
   }
 
   private extractChartData(klientSkills, stakeholderSkills) {

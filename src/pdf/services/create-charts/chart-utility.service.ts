@@ -17,26 +17,30 @@ export class ChartUtilityService {
         {
           label: 'Klient',
           data: klientSkills,
-          borderColor: ['rgb(205, 104, 95)'],
-          backgroundColor: ['rgb(205, 104, 95)'],
+          barThickness: 30,
+          backgroundColor: ['rgb(56, 45, 115)'],
         },
         {
           label: 'Stakeholder',
           data: stakeholderSkills,
-          borderColor: ['rgb(179, 175, 157)'],
-          backgroundColor: ['rgb(179, 175, 157)'],
+          barThickness: 30,
+          backgroundColor: ['rgb(213, 69, 60)'],
         },
       ],
     };
     const barChartOptions: ChartOptions = {
       /* categoryPercentage: 0.5, */
       /* barPercentage: 1, */
+      responsive: true,
       indexAxis: 'y',
       scales: {
         y: {
+          afterFit: function (scaleInstance) {
+            scaleInstance.width = 400; // sets the width to 100px
+          },
           ticks: {
             font: {
-              size: 21,
+              size: 36,
             },
           },
         },
@@ -51,6 +55,11 @@ export class ChartUtilityService {
         },
       },
     };
-    return this.barChartFactory.createChart(barChartData, barChartOptions);
+    return this.barChartFactory.createChart(
+      barChartData,
+      barChartOptions,
+      1500, //450, need to increase width and height to increase the quality of the image
+      500, //170,
+    );
   }
 }
