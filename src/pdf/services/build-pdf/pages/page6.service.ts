@@ -3,13 +3,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PageService } from '../page.interface';
 import { ChartFactory } from '../../create-charts/chart.factory';
 import { ChartOptions } from 'chart.js';
+import { ChartUtilityService } from '../../create-charts/chart-utility.service';
 
 @Injectable()
 export class Page6Service {
-  constructor(
-    @Inject('BarChartFactory') private barCharFactory: ChartFactory,
-    @Inject('DoughnutChartFactory') private doughnutChartFactory: ChartFactory,
-  ) {}
+  constructor(private readonly chartUtilityService: ChartUtilityService) {}
   async addContentToPage(
     doc: PDFDocument,
     klientMap: CompetenceData,
@@ -22,7 +20,10 @@ export class Page6Service {
         height: 842,
       });
 
-    const barChart = await this.createBarChart(klientMap, stakeholderMap);
+    const barChart = await this.chartUtilityService.createBarChartE4FIndex(
+      klientMap,
+      stakeholderMap,
+    );
     doc.image(barChart, 50, 655, { width: 425, height: 60 });
 
     this.enrichMapWithPercentage(klientMap);
@@ -129,7 +130,7 @@ export class Page6Service {
     await Promise.all(
       Object.entries(klientCompetenceMap).map(
         async ([competence, competenceData]) => {
-          const doughnut = await this.createDoughnutChart(
+          const doughnut = await this.chartUtilityService.createDoughnutChart(
             competenceData.percentage,
           );
           doughnutObject[competence] = doughnut;
@@ -138,100 +139,6 @@ export class Page6Service {
     );
 
     return doughnutObject;
-  }
-
-  private async createDoughnutChart(kompetenzPercentage) {
-    const doughnutChartData = {
-      labels: ['Red', 'Blue', 'Yellow'],
-      borderWidth: 1,
-      datasets: [
-        {
-          label: 'My First Dataset',
-          data: [100 - kompetenzPercentage, kompetenzPercentage],
-          backgroundColor: ['rgb(56, 45, 115)', 'rgb(153, 0, 51)'],
-        },
-      ],
-    };
-    const doughnutChartOptions = {
-      cutout: '70%',
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-      elements: {
-        center: {
-          text: 'Red is 2/3 the total numbers',
-          color: '#FF6384', // Default is #000000
-          fontStyle: 'Arial', // Default is Arial
-          sidePadding: 20, // Default is 20 (as a percentage)
-          minFontSize: 20, // Default is 20 (in px), set to false and text will not wrap.
-          lineHeight: 25, // Default is 25 (in px), used for when text wraps
-        },
-      },
-    };
-    return this.doughnutChartFactory.createChart(
-      doughnutChartData,
-      doughnutChartOptions,
-    );
-  }
-
-  private createBarChart(klientMap, stakeholderMap) {
-    const klientAverage = this.calculateAverageOfAverages(klientMap);
-    const stakeholderAverage = this.calculateAverageOfAverages(stakeholderMap);
-    const barChartData = {
-      labels: [''],
-      datasets: [
-        {
-          label: [''],
-          data: [klientAverage],
-          backgroundColor: 'rgb(56, 45, 115)',
-        },
-        {
-          label: [''],
-          data: [stakeholderAverage],
-          backgroundColor: 'rgb(213, 69, 60)',
-        },
-      ],
-    };
-    const barChartOptions: ChartOptions = {
-      /* categoryPercentage: 0.5, */
-      /* barPercentage: 1, */
-      indexAxis: 'y',
-      scales: {
-        y: {
-          ticks: {
-            font: {
-              size: 21,
-            },
-          },
-        },
-        x: {
-          min: 1,
-          max: 5,
-        },
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-    };
-
-    return this.barCharFactory.createChart(barChartData, barChartOptions);
-  }
-
-  private calculateAverageOfAverages(data: CompetenceData) {
-    let totalAverage = 0;
-    let numCompetences = 0;
-
-    for (const competenceData of Object.values(data)) {
-      totalAverage += competenceData.averageRating;
-      numCompetences++;
-    }
-
-    const averageOfAverages = totalAverage / numCompetences;
-    return averageOfAverages;
   }
 
   private enrichMapWithPercentage(map: CompetenceData) {
