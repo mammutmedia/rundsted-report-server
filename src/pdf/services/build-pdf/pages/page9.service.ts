@@ -11,18 +11,27 @@ export class Page9Service {
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
   ) {
-    const COMPETENZ_1 = 'Digital literacy';
+    doc
+      .addPage()
+      .image('./src/pdf/services/build-pdf/pdf/de/page-09.png', 0, 0, {
+        width: 620,
+        height: 842,
+      });
 
-    const DigitalLiteracyData = this.extractChartData(
+    const COMPETENZ_1 = 'Ecosystem-Management';
+
+    const ecoSystemManagementData = this.extractChartData(
       klientMap[COMPETENZ_1].skills,
       stakeholderMap[COMPETENZ_1].skills,
     );
 
-    const chartDigitalLiteracy = this.chartUtilityService.createBarChart(
-      DigitalLiteracyData.labels,
-      DigitalLiteracyData.klientSkills,
-      DigitalLiteracyData.stakeholderSkills,
-    );
+    const chartEcosystemManagement =
+      await this.chartUtilityService.createBarChart(
+        ecoSystemManagementData.labels,
+        ecoSystemManagementData.klientSkills,
+        ecoSystemManagementData.stakeholderSkills,
+      );
+    doc.image(chartEcosystemManagement, 90, 250, { width: 450, height: 150 });
   }
 
   private extractChartData(klientSkills, stakeholderSkills) {

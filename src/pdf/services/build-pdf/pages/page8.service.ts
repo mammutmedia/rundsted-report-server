@@ -11,6 +11,13 @@ export class Page8Service {
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
   ) {
+    doc
+      .addPage()
+      .image('./src/pdf/services/build-pdf/pdf/de/page-08.png', 0, 0, {
+        width: 620,
+        height: 842,
+      });
+
     const COMPETENZ_1 = 'Digital literacy';
     const COMPETENZ_2 = 'Enterprising mindset';
 
@@ -24,17 +31,21 @@ export class Page8Service {
       stakeholderMap[COMPETENZ_2].skills,
     );
 
-    const chartDigitalLiteracy = this.chartUtilityService.createBarChart(
+    const chartDigitalLiteracy = await this.chartUtilityService.createBarChart(
       digitalLiteracyData.labels,
       digitalLiteracyData.klientSkills,
       digitalLiteracyData.stakeholderSkills,
     );
 
-    const chartEnterprisingMindset = this.chartUtilityService.createBarChart(
-      enterprisingMindsetData.labels,
-      enterprisingMindsetData.klientSkills,
-      enterprisingMindsetData.stakeholderSkills,
-    );
+    const chartEnterprisingMindset =
+      await this.chartUtilityService.createBarChart(
+        enterprisingMindsetData.labels,
+        enterprisingMindsetData.klientSkills,
+        enterprisingMindsetData.stakeholderSkills,
+      );
+
+    doc.image(chartDigitalLiteracy, 90, 290, { width: 450, height: 150 });
+    doc.image(chartEnterprisingMindset, 90, 570, { width: 450, height: 150 });
   }
 
   private extractChartData(klientSkills, stakeholderSkills) {
