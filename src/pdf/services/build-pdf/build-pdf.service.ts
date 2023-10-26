@@ -9,6 +9,7 @@ import { Page6Service } from './pages/page6.service';
 import { Page9Service } from './pages/page9.service';
 import { Page10Service } from './pages/page10.service';
 import { Page11Service } from './pages/page11.service';
+import { Page12Service } from './pages/page12.service';
 
 @Injectable()
 export class BuildPdfService {
@@ -20,6 +21,7 @@ export class BuildPdfService {
     private readonly page9Service: Page9Service,
     private readonly page10Service: Page10Service,
     private readonly page11Service: Page11Service,
+    private readonly page12Service: Page12Service,
   ) {}
 
   private addImageToPage(doc: PDFDocument, imagePath: string, page?: number) {
@@ -63,6 +65,7 @@ export class BuildPdfService {
     await this.page9Service.addContentToPage(doc, klientMap, stakeholderMap);
     await this.page10Service.addContentToPage(doc, klientMap, stakeholderMap);
     await this.page11Service.addContentToPage(doc, klientMap, stakeholderMap);
+    await this.page12Service.addContentToPage(doc, klientMap, stakeholderMap);
 
     // Finalize the PDF and end the stream
     doc.end();

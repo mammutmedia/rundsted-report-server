@@ -9,6 +9,7 @@ import { Page8Service } from './pages/page8.service';
 import { Page9Service } from './pages/page9.service';
 import { Page10Service } from './pages/page10.service';
 import { Page11Service } from './pages/page11.service';
+import { Page12Service } from './pages/page12.service';
 
 @Module({
   providers: [
@@ -19,6 +20,7 @@ import { Page11Service } from './pages/page11.service';
     Page9Service,
     Page10Service,
     Page11Service,
+    Page12Service,
     BuildPdfService,
   ],
   exports: [BuildPdfService],
