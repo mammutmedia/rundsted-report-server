@@ -3,42 +3,55 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class Page10Service {
+  private readonly PAGE_IMAGE =
+    './src/pdf/services/build-pdf/pdf/de/page-10.png';
+  private readonly PAGE_WIDTH = 620;
+  private readonly PAGE_HEIGHT = 842;
+  private readonly LINE_HEIGHT = 15;
+
+  private readonly X_POS_KLIENT = 62;
+  private readonly X_POS_STAKEHOLDER = 306;
+  private readonly RATING_DISTANCE = 130;
+
   async addContentToPage(
     doc: PDFDocument,
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
   ) {
-    doc
-      .addPage()
-      .image('./src/pdf/services/build-pdf/pdf/de/page-10.png', 0, 0, {
-        width: 620,
-        height: 842,
-      });
+    doc.addPage().image(this.PAGE_IMAGE, 0, 0, {
+      width: this.PAGE_WIDTH,
+      height: this.PAGE_HEIGHT,
+    });
 
-    /* extract skills as a list with [{skill: rating}, ...] */
     const { sortedSkillsKlient, sortedSkillsStake } = this.extractData(
       klientMap,
       stakeholderMap,
     );
 
     let yPos = 285;
-    const LINE_HEIGHT = 15;
-    const X_POS_KLIENT = 62;
-    const X_POS_STAKEHOLDER = 306;
-    const RATING_DISTANCE = 130;
     doc.fontSize(9);
     doc.fillColor('#696969');
-
     for (let i = 0; i < sortedSkillsKlient.length; i++) {
       const { skill: klientSkill, rating: klientRating } =
         sortedSkillsKlient[i];
       const { skill: stakeSkill, rating: stakeRating } = sortedSkillsStake[i];
-      doc.text(klientSkill, X_POS_KLIENT, yPos);
-      doc.text(klientRating, X_POS_KLIENT + RATING_DISTANCE, yPos);
-      /* stakeholder column */
-      doc.text(stakeSkill, X_POS_STAKEHOLDER, yPos);
-      doc.text(stakeRating, X_POS_STAKEHOLDER + RATING_DISTANCE, yPos);
-      yPos += LINE_HEIGHT;
+
+      this.renderSkillRatingPair(
+        doc,
+        klientSkill,
+        klientRating,
+        this.X_POS_KLIENT,
+        yPos,
+      );
+      this.renderSkillRatingPair(
+        doc,
+        stakeSkill,
+        stakeRating,
+        this.X_POS_STAKEHOLDER,
+        yPos,
+      );
+
+      yPos += this.LINE_HEIGHT;
     }
   }
 
@@ -56,9 +69,19 @@ export class Page10Service {
   }
 
   extractSkillRatingPairs(data: CompetenceData) {
-    /* returns [ { skill: 'Digital excitement', rating: 2 },...] */
     return Object.entries(data).flatMap(([competence, { skills }]) =>
       Object.entries(skills).map(([skill, rating]) => ({ skill, rating })),
     );
+  }
+
+  private renderSkillRatingPair(
+    doc: PDFDocument,
+    skill: string,
+    rating: number,
+    xPos: number,
+    yPos: number,
+  ) {
+    doc.text(skill, xPos, yPos);
+    doc.text(rating.toString(), xPos + this.RATING_DISTANCE, yPos);
   }
 }
