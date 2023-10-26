@@ -102,7 +102,6 @@ export class Page6Service {
     klientMap: CompetenceData,
   ) {
     for (let i = 0; i < competences.length; i++) {
-      console.log(`running ${i}`);
       const competence = competences[i];
 
       // Add the doughnut chart

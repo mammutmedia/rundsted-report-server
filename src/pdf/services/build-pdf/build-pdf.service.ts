@@ -7,6 +7,8 @@ import { CleanDataDto } from 'src/pdf/dtos/cleanData.dto';
 import { Page5Service } from './pages/page5.service';
 import { Page6Service } from './pages/page6.service';
 import { Page9Service } from './pages/page9.service';
+import { Page10Service } from './pages/page10.service';
+import { Page11Service } from './pages/page11.service';
 
 @Injectable()
 export class BuildPdfService {
@@ -16,6 +18,8 @@ export class BuildPdfService {
     private readonly page7Service: Page7Service,
     private readonly page8Service: Page8Service,
     private readonly page9Service: Page9Service,
+    private readonly page10Service: Page10Service,
+    private readonly page11Service: Page11Service,
   ) {}
 
   private addImageToPage(doc: PDFDocument, imagePath: string, page?: number) {
@@ -37,7 +41,7 @@ export class BuildPdfService {
     const klientMap = this._transformToMap(klient);
     const stakeholderMap = this._transformToMap(stakeholder);
     const doc = new PDFDocument({ margin: 0, size: 'A4' });
-    doc.fontSize(8);
+    doc.fontSize(9);
     const filename = 'myDocument.pdf';
     const writeStream = fs.createWriteStream(filename);
     doc.pipe(writeStream);
@@ -57,6 +61,8 @@ export class BuildPdfService {
     await this.page7Service.addContentToPage(doc, klientMap, stakeholderMap);
     await this.page8Service.addContentToPage(doc, klientMap, stakeholderMap);
     await this.page9Service.addContentToPage(doc, klientMap, stakeholderMap);
+    await this.page10Service.addContentToPage(doc, klientMap, stakeholderMap);
+    await this.page11Service.addContentToPage(doc, klientMap, stakeholderMap);
 
     // Finalize the PDF and end the stream
     doc.end();

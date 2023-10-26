@@ -7,6 +7,8 @@ import { ChartModule } from '../create-charts/create-charts.module'; // Import C
 import { Page7Service } from './pages/page7.service';
 import { Page8Service } from './pages/page8.service';
 import { Page9Service } from './pages/page9.service';
+import { Page10Service } from './pages/page10.service';
+import { Page11Service } from './pages/page11.service';
 
 @Module({
   providers: [
@@ -15,6 +17,8 @@ import { Page9Service } from './pages/page9.service';
     Page7Service,
     Page8Service,
     Page9Service,
+    Page10Service,
+    Page11Service,
     BuildPdfService,
   ],
   exports: [BuildPdfService],
