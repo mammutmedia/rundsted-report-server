@@ -18,10 +18,7 @@ export class Page12Service {
       height: this.PAGE_HEIGHT,
     });
 
-    /* find strongest competenz */
-    console.log(klientMap);
     const { highest, lowest } = this.findHighestLowestAverageRating(klientMap);
-    console.log(highest, lowest);
     doc.fontSize(11);
     doc.fillColor('#696969');
     doc.text(highest.kompetenz, 215, 219);

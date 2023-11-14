@@ -36,3 +36,4 @@ lerna-debug.log*
 
 
 /src/pdf/services/create-charts/test-images
+report*.pdf

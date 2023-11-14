@@ -44,7 +44,8 @@ export class BuildPdfService {
     const stakeholderMap = this._transformToMap(stakeholder);
     const doc = new PDFDocument({ margin: 0, size: 'A4' });
     doc.fontSize(9);
-    const filename = 'myDocument.pdf';
+
+    const filename = `report-${new Date().valueOf()}.pdf`;
     const writeStream = fs.createWriteStream(filename);
     doc.pipe(writeStream);
 
@@ -70,6 +71,6 @@ export class BuildPdfService {
     // Finalize the PDF and end the stream
     doc.end();
 
-    return doc;
+    return filename;
   }
 }

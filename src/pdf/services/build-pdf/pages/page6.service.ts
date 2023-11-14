@@ -29,6 +29,8 @@ export class Page6Service {
     this.enrichMapWithPercentage(klientMap);
     this.enrichMapWithPercentage(stakeholderMap);
 
+    console.log(klientMap);
+
     let yPos = 235;
     const LINE_HEIGHT = 15;
     const X_POS_RATING = 330;
@@ -142,7 +144,9 @@ export class Page6Service {
 
   private enrichMapWithPercentage(map: CompetenceData) {
     for (const competenceData of Object.values(map)) {
-      competenceData.percentage = competenceData.averageRating / 0.05;
+      competenceData.percentage = parseFloat(
+        (competenceData.averageRating / 0.05).toFixed(2),
+      );
     }
   }
 }
