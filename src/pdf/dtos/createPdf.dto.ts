@@ -41,4 +41,5 @@ export class CreateReportDto {
   @ArrayMinSize(2) // at least 2 stakeholders
   @Type(() => StakeholderDto)
   stakeholder: StakeholderDto[];
+  language: Language;
 }
