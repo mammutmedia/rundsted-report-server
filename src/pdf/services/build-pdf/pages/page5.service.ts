@@ -1,8 +1,5 @@
 import { PDFDocument } from 'pdfkit';
-import { Inject, Injectable } from '@nestjs/common';
-import { ChartFactory } from '../../create-charts/chart.factory';
-import { ChartOptions } from 'chart.js';
-import { PageService } from '../page.interface';
+import { Injectable } from '@nestjs/common';
 import { ChartUtilityService } from '../../create-charts/chart-utility.service';
 
 @Injectable()
@@ -12,13 +9,12 @@ export class Page5Service {
     doc: PDFDocument,
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
+    PDF_LOCATION: string,
   ) {
-    doc
-      .addPage()
-      .image('./src/pdf/services/build-pdf/pdf/de/page-05.png', 0, 0, {
-        width: 620,
-        height: 842,
-      });
+    doc.addPage().image(PDF_LOCATION, 0, 0, {
+      width: 620,
+      height: 842,
+    });
 
     const radarChart = await this.chartUtilityService.createRadarChart(
       klientMap,

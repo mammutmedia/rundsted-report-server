@@ -1,18 +1,25 @@
-import {
-  IsString,
-  IsInt,
-  IsObject,
-  ValidateNested,
-  IsNumber,
-} from 'class-validator';
+import { IsString, IsNumber, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class SkillDto {
-  @IsString()
-  skill: string;
-
+class SkillItemDto {
   @IsNumber()
-  value: number;
+  rating: number;
+
+  @IsString()
+  skillName: string;
+
+  // Add more language-specific properties if needed
+  @IsString()
+  de: string;
+
+  @IsString()
+  en: string;
+
+  @IsString()
+  it: string;
+
+  @IsString()
+  fr: string;
 }
 
 export class KompetenzDto {
@@ -22,11 +29,26 @@ export class KompetenzDto {
   @IsNumber()
   sum: number;
 
-  @IsObject()
   @ValidateNested({ each: true })
-  @Type(() => SkillDto)
-  skills: SkillDto[];
+  @Type(() => SkillItemDto)
+  skills: SkillItemDto[];
 
   @IsNumber()
   averageRating: number;
+
+  @IsNumber()
+  percentage: number;
+
+  // Top-level language properties
+  @IsString()
+  de: string;
+
+  @IsString()
+  en: string;
+
+  @IsString()
+  it: string;
+
+  @IsString()
+  fr: string;
 }

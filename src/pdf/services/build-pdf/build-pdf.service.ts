@@ -38,35 +38,77 @@ export class BuildPdfService {
     }, {});
   }
 
-  async buildPdf(cleanData: CleanDataDto) {
+  async buildPdf(cleanData: CleanDataDto, lang: Language) {
     const { klient, stakeholder } = cleanData;
     const klientMap = this._transformToMap(klient);
     const stakeholderMap = this._transformToMap(stakeholder);
     const doc = new PDFDocument({ margin: 0, size: 'A4' });
     doc.fontSize(9);
+    const PDF_LOCATION = `./src/pdf/services/build-pdf/pdf/${lang}/`;
 
     const filename = `report-${new Date().valueOf()}.pdf`;
     const writeStream = fs.createWriteStream(filename);
     doc.pipe(writeStream);
 
-    this.addImageToPage(
-      doc,
-      './src/pdf/services/build-pdf/pdf/de/page-01.png',
-      1,
-    );
-    this.addImageToPage(doc, './src/pdf/services/build-pdf/pdf/de/page-02.png');
-    this.addImageToPage(doc, './src/pdf/services/build-pdf/pdf/de/page-03.png');
-    this.addImageToPage(doc, './src/pdf/services/build-pdf/pdf/de/page-04.png');
+    this.addImageToPage(doc, `${PDF_LOCATION}page-01.png`, 1);
+    this.addImageToPage(doc, `${PDF_LOCATION}page-02.png`);
+    this.addImageToPage(doc, `${PDF_LOCATION}page-03.png`);
+    this.addImageToPage(doc, `${PDF_LOCATION}page-04.png`);
 
     // Add the pages to the document using the respective services
-    await this.page5Service.addContentToPage(doc, klientMap, stakeholderMap);
-    await this.page6Service.addContentToPage(doc, klientMap, stakeholderMap);
-    await this.page7Service.addContentToPage(doc, klientMap, stakeholderMap);
-    await this.page8Service.addContentToPage(doc, klientMap, stakeholderMap);
-    await this.page9Service.addContentToPage(doc, klientMap, stakeholderMap);
-    await this.page10Service.addContentToPage(doc, klientMap, stakeholderMap);
-    await this.page11Service.addContentToPage(doc, klientMap, stakeholderMap);
-    await this.page12Service.addContentToPage(doc, klientMap, stakeholderMap);
+    await this.page5Service.addContentToPage(
+      doc,
+      klientMap,
+      stakeholderMap,
+      `${PDF_LOCATION}page-05.png`,
+    );
+    await this.page6Service.addContentToPage(
+      doc,
+      klientMap,
+      stakeholderMap,
+      `${PDF_LOCATION}page-06.png`,
+    );
+    await this.page7Service.addContentToPage(
+      doc,
+      klientMap,
+      stakeholderMap,
+      lang,
+      `${PDF_LOCATION}page-07.png`,
+    );
+    await this.page8Service.addContentToPage(
+      doc,
+      klientMap,
+      stakeholderMap,
+      lang,
+      `${PDF_LOCATION}page-08.png`,
+    );
+    await this.page9Service.addContentToPage(
+      doc,
+      klientMap,
+      stakeholderMap,
+      lang,
+      `${PDF_LOCATION}page-09.png`,
+    );
+    await this.page10Service.addContentToPage(
+      doc,
+      klientMap,
+      stakeholderMap,
+      lang,
+      `${PDF_LOCATION}page-10.png`,
+    );
+    await this.page11Service.addContentToPage(
+      doc,
+      klientMap,
+      stakeholderMap,
+      lang,
+      `${PDF_LOCATION}page-11.png`,
+    );
+    await this.page12Service.addContentToPage(
+      doc,
+      klientMap,
+      lang,
+      `${PDF_LOCATION}page-12.png`,
+    );
 
     // Finalize the PDF and end the stream
     doc.end();

@@ -1,8 +1,6 @@
 import { PDFDocument } from 'pdfkit';
 import { Inject, Injectable } from '@nestjs/common';
 import { PageService } from '../page.interface';
-import { ChartFactory } from '../../create-charts/chart.factory';
-import { ChartOptions } from 'chart.js';
 import { ChartUtilityService } from '../../create-charts/chart-utility.service';
 
 @Injectable()
@@ -12,13 +10,12 @@ export class Page6Service {
     doc: PDFDocument,
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
+    PDF_LOCATION: string,
   ) {
-    doc
-      .addPage()
-      .image('./src/pdf/services/build-pdf/pdf/de/page-06.png', 0, 0, {
-        width: 620,
-        height: 842,
-      });
+    doc.addPage().image(PDF_LOCATION, 0, 0, {
+      width: 620,
+      height: 842,
+    });
 
     const barChart = await this.chartUtilityService.createBarChartE4FIndex(
       klientMap,
@@ -28,8 +25,6 @@ export class Page6Service {
 
     this.enrichMapWithPercentage(klientMap);
     this.enrichMapWithPercentage(stakeholderMap);
-
-    console.log(klientMap);
 
     let yPos = 235;
     const LINE_HEIGHT = 15;

@@ -19,21 +19,23 @@ export class PdfService {
   async createPdf(data: CreateReportDto) {
     /* clean data Service */
     const cleanedData: CleanDataDto = this.cleanDataService.cleanData(data);
-    /* create Charts Service */
-    /* const charts = await this.createChartsService.createCharts(cleanedData); */
+
+    const lang: Language = 'de';
     /* Build PDf Service */
-    const filename = await this.buildPdfService.buildPdf(cleanedData);
+    const filename = await this.buildPdfService.buildPdf(cleanedData, lang);
     await this.mailService.sendMail('jowid100@gmail.com', filename);
     /* Upload PDF to S3 Service */
     /* this.s3Service.uploadPdf(data); */
 
-    /*  fs.unlink(filename, (err) => {
-      if (err) {
-        console.error('Failed to delete the report file: ', err);
-      } else {
-        console.log('Report file deleted successfully');
-      }
-    }); */
+    if (process.env.NODE_ENV === 'production') {
+      fs.unlink(filename, (err) => {
+        if (err) {
+          console.error('Failed to delete the report file: ', err);
+        } else {
+          console.log('Report file deleted successfully');
+        }
+      });
+    }
     return 'This action returns the pdf';
   }
 }

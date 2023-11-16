@@ -6,8 +6,6 @@ import { Page10Service } from './page10.service'; // Assuming this is the correc
 export class Page11Service {
   constructor(private readonly page10Service: Page10Service) {}
 
-  private readonly PAGE_IMAGE =
-    './src/pdf/services/build-pdf/pdf/de/page-11.png';
   private readonly PAGE_WIDTH = 620;
   private readonly PAGE_HEIGHT = 842;
   private readonly LINE_HEIGHT = 12;
@@ -20,18 +18,20 @@ export class Page11Service {
     doc: PDFDocument,
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
+    language: Language,
+    PDF_LOCATION: string,
   ) {
-    doc.addPage().image(this.PAGE_IMAGE, 0, 0, {
+    doc.addPage().image(PDF_LOCATION, 0, 0, {
       width: this.PAGE_WIDTH,
       height: this.PAGE_HEIGHT,
     });
 
     const skillsKlient = this.sortSkills(
-      this.page10Service.extractSkillRatingPairs(klientMap),
+      this.page10Service.extractSkillRatingPairs(klientMap, language),
     );
 
     const skillsStakeholder = this.sortSkills(
-      this.page10Service.extractSkillRatingPairs(stakeholderMap),
+      this.page10Service.extractSkillRatingPairs(stakeholderMap, language),
     );
 
     const { hiddenSelfSkills, blindSelfSkills } = this.extractHiddenBlindSkills(
@@ -42,8 +42,11 @@ export class Page11Service {
     this.renderSkills(doc, hiddenSelfSkills, this.X_POS_HIDDEN);
     this.renderSkills(doc, blindSelfSkills, this.X_POS_BLIND);
 
-    const hiddenSelfText = this.textByLanguage('de', hiddenSelfSkills.length);
-    const blindSelfText = this.textByLanguage('de', blindSelfSkills.length);
+    const hiddenSelfText = this.textByLanguage(
+      language,
+      hiddenSelfSkills.length,
+    );
+    const blindSelfText = this.textByLanguage(language, blindSelfSkills.length);
 
     this.renderCountText(doc, hiddenSelfText, 215);
     this.renderCountText(doc, blindSelfText, 370);
@@ -112,6 +115,9 @@ export class Page11Service {
     const text = (count) => {
       return {
         de: `in ${count} Fällen`,
+        en: `in ${count} cases`,
+        fr: `dans ${count} cas`,
+        it: `in ${count} casi`,
       };
     };
 

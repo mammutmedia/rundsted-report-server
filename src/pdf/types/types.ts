@@ -1,5 +1,11 @@
 type Skill = {
-  [key: string]: number;
+  [key: string]: {
+    rating: number;
+    de: string;
+    en: string;
+    it: string;
+    fr: string;
+  };
 };
 
 type Competence = {
@@ -8,8 +14,15 @@ type Competence = {
   skills: Skill;
   averageRating: number;
   percentage?: number;
+  // Top-level language properties
+  de: string;
+  en: string;
+  it: string;
+  fr: string;
 };
 
 type CompetenceData = {
   [key: string]: Competence;
 };
+
+type Language = 'de' | 'en' | 'it' | 'fr';

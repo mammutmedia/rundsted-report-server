@@ -1,28 +1,33 @@
 import { PDFDocument } from 'pdfkit';
 import { Injectable } from '@nestjs/common';
 import { ChartUtilityService } from '../../create-charts/chart-utility.service';
+import { Page7Service } from './page7.service';
 
 @Injectable()
 export class Page9Service {
-  constructor(private readonly chartUtilityService: ChartUtilityService) {}
+  constructor(
+    private readonly chartUtilityService: ChartUtilityService,
+    private readonly page7Service: Page7Service,
+  ) {}
 
   async addContentToPage(
     doc: PDFDocument,
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
+    lang,
+    PDF_LOCATION,
   ) {
-    doc
-      .addPage()
-      .image('./src/pdf/services/build-pdf/pdf/de/page-09.png', 0, 0, {
-        width: 620,
-        height: 842,
-      });
+    doc.addPage().image(PDF_LOCATION, 0, 0, {
+      width: 620,
+      height: 842,
+    });
 
     const COMPETENZ_1 = 'Ecosystem-Management';
 
-    const ecoSystemManagementData = this.extractChartData(
+    const ecoSystemManagementData = this.page7Service.extractChartData(
       klientMap[COMPETENZ_1].skills,
       stakeholderMap[COMPETENZ_1].skills,
+      lang,
     );
 
     const chartEcosystemManagement =
@@ -32,17 +37,5 @@ export class Page9Service {
         ecoSystemManagementData.stakeholderSkills,
       );
     doc.image(chartEcosystemManagement, 90, 250, { width: 450, height: 150 });
-  }
-
-  private extractChartData(klientSkills, stakeholderSkills) {
-    const labels = Object.keys(klientSkills);
-    const klientSkillsRating = Object.values(klientSkills);
-    const stakeholderSkillsRating = Object.values(stakeholderSkills);
-
-    return {
-      labels,
-      klientSkills: klientSkillsRating,
-      stakeholderSkills: stakeholderSkillsRating,
-    };
   }
 }

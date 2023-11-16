@@ -3,8 +3,6 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class Page10Service {
-  private readonly PAGE_IMAGE =
-    './src/pdf/services/build-pdf/pdf/de/page-10.png';
   private readonly PAGE_WIDTH = 620;
   private readonly PAGE_HEIGHT = 842;
   private readonly LINE_HEIGHT = 15;
@@ -17,8 +15,10 @@ export class Page10Service {
     doc: PDFDocument,
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
+    language: Language,
+    PDF_LOCATION: string,
   ) {
-    doc.addPage().image(this.PAGE_IMAGE, 0, 0, {
+    doc.addPage().image(PDF_LOCATION, 0, 0, {
       width: this.PAGE_WIDTH,
       height: this.PAGE_HEIGHT,
     });
@@ -26,6 +26,7 @@ export class Page10Service {
     const { sortedSkillsKlient, sortedSkillsStake } = this.extractData(
       klientMap,
       stakeholderMap,
+      language,
     );
 
     let yPos = 285;
@@ -55,12 +56,18 @@ export class Page10Service {
     }
   }
 
-  private extractData(klientMap, stakeholderMap) {
-    const klientSkillRatingPairs = this.extractSkillRatingPairs(klientMap);
-    const stakeholderSkillRatingPairs =
-      this.extractSkillRatingPairs(stakeholderMap);
+  private extractData(klientMap, stakeholderMap, language: Language) {
+    const klientSkillRatingPairs = this.extractSkillRatingPairs(
+      klientMap,
+      language,
+    );
+    const stakeholderSkillRatingPairs = this.extractSkillRatingPairs(
+      stakeholderMap,
+      language,
+    );
     const sortedSkillsKlient = this.sort(klientSkillRatingPairs);
     const sortedSkillsStake = this.sort(stakeholderSkillRatingPairs);
+
     return { sortedSkillsKlient, sortedSkillsStake };
   }
 
@@ -68,10 +75,22 @@ export class Page10Service {
     return data.sort((a, b) => b.rating - a.rating);
   }
 
-  extractSkillRatingPairs(data: CompetenceData) {
-    return Object.entries(data).flatMap(([competence, { skills }]) =>
-      Object.entries(skills).map(([skill, rating]) => ({ skill, rating })),
-    );
+  extractSkillRatingPairs(data: CompetenceData, language: Language) {
+    const skillRatingArray = [];
+
+    for (const competencyKey in data) {
+      const competency = data[competencyKey];
+
+      for (const skillKey in competency.skills) {
+        const skill = competency.skills[skillKey];
+        const skillName = skill[language];
+        const rating = skill.rating;
+
+        skillRatingArray.push({ skill: skillName, rating });
+      }
+    }
+
+    return skillRatingArray;
   }
 
   private renderSkillRatingPair(

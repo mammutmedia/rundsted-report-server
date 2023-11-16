@@ -10,13 +10,13 @@ export class Page7Service {
     doc: PDFDocument,
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
+    lang: Language,
+    PDF_LOCATION: string,
   ) {
-    doc
-      .addPage()
-      .image('./src/pdf/services/build-pdf/pdf/de/page-07.png', 0, 0, {
-        width: 620,
-        height: 842,
-      });
+    doc.addPage().image(PDF_LOCATION, 0, 0, {
+      width: 620,
+      height: 842,
+    });
 
     const COMPETENZ_1 = 'Problem solving';
     const COMPETENZ_2 = 'Learning Agility';
@@ -24,11 +24,13 @@ export class Page7Service {
     const problemSolvingData = this.extractChartData(
       klientMap[COMPETENZ_1].skills,
       stakeholderMap[COMPETENZ_1].skills,
+      lang,
     );
 
     const learningAgilityData = this.extractChartData(
       klientMap[COMPETENZ_2].skills,
       stakeholderMap[COMPETENZ_2].skills,
+      lang,
     );
 
     const chartProblemSolving = await this.chartUtilityService.createBarChart(
@@ -47,15 +49,26 @@ export class Page7Service {
     doc.image(chartLearningAgility, 90, 570, { width: 450, height: 150 });
   }
 
-  private extractChartData(klientSkills, stakeholderSkills) {
-    const labels = Object.keys(klientSkills);
-    const klientSkillsRating = Object.values(klientSkills);
-    const stakeholderSkillsRating = Object.values(stakeholderSkills);
-
+  extractChartData(klientSkills, stakeholderSkills, lang) {
+    const labels = this.extractSkillNamesByLanguage(klientSkills, lang);
+    const klientSkillsRating = Object.values(klientSkills).map(
+      // @ts-ignore
+      (data) => data.rating,
+    );
+    const stakeholderSkillsRating = Object.values(stakeholderSkills).map(
+      // @ts-ignore
+      (data) => data.rating,
+    );
     return {
       labels,
       klientSkills: klientSkillsRating,
       stakeholderSkills: stakeholderSkillsRating,
     };
+  }
+
+  private extractSkillNamesByLanguage(skillObject, language) {
+    return Object.values(skillObject)
+      .map((data) => data[language])
+      .filter((name) => name !== null);
   }
 }
