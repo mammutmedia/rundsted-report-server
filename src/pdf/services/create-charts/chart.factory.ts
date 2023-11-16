@@ -35,11 +35,11 @@ class BaseChartStrategy implements IChartStrategy {
     });
 
     const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
-    const directory = './src/pdf/services/create-charts/test-images/';
+    /* const directory = './src/pdf/services/create-charts/test-images/';
     fs.writeFileSync(
       `${directory}chart${new Date().getMilliseconds().toString()}.png`,
       buffer,
-    );
+    ); */
     return buffer;
   }
 }
