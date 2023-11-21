@@ -45,7 +45,7 @@ jobs:
       - name: Deploy to AWS
         run: |
           aws deploy create-deployment \
-            --application-name E4F-Report-Server \
+            --application-name Rundstedt-backend \
             --deployment-group-name RundstedtBackendDeploymentGroup \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
