@@ -21,12 +21,12 @@ export class Page6Service {
       klientMap,
       stakeholderMap,
     );
-    doc.image(barChart, 50, 655, { width: 425, height: 60 });
+    doc.image(barChart, 50, 638, { width: 425, height: 60 });
 
     this.enrichMapWithPercentage(klientMap);
     this.enrichMapWithPercentage(stakeholderMap);
 
-    let yPos = 235;
+    let yPos = 218;
     const LINE_HEIGHT = 15;
     const X_POS_RATING = 330;
     const X_POS_PERCENTAGE = 370;
@@ -51,7 +51,7 @@ export class Page6Service {
     doughnut: Record<string, any>,
     klientMap: CompetenceData,
   ) {
-    const Y_POS_FIRST_ROW = 340;
+    const Y_POS_FIRST_ROW = 323;
     const INITIAL_FIRST_ROW_X_POS = 63;
     const FIRST_MARGIN_BETWEEN_DOUGHNUTS = 200;
     const firstRowCompetences = [
@@ -70,7 +70,7 @@ export class Page6Service {
       klientMap,
     );
 
-    const Y_POS_SECOND_ROW = 430;
+    const Y_POS_SECOND_ROW = 413;
     const INITIAL_SECOND_ROW_X_POS = 150;
     const SECOND_MARGIN_BETWEEN_DOUGHNUTS = 220;
     const secondRowCompetences = [

@@ -24,8 +24,8 @@ export class Page12Service {
     console.log(highest, lowest);
     doc.fontSize(11);
     doc.fillColor('#696969');
-    doc.text(highest.kompetenz, 215, 219);
-    doc.text(lowest.kompetenz, 235, 255);
+    doc.text(highest.kompetenz, 240, 219);
+    doc.text(lowest.kompetenz, 240, 237);
   }
 
   findHighestLowestAverageRating(data, language: Language) {

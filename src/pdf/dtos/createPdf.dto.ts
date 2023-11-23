@@ -42,4 +42,5 @@ export class CreateReportDto {
   @Type(() => StakeholderDto)
   stakeholder: StakeholderDto[];
   language: Language;
+  email: string;
 }
