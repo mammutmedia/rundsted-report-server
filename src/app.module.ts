@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PdfModule } from './pdf/pdf.module';
 import { HomeController } from './home/home.controller';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PdfModule],
+  imports: [PdfModule, ConfigModule.forRoot()],
   controllers: [HomeController],
   providers: [],
 })

@@ -1,18 +1,19 @@
+import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as AWS from 'aws-sdk';
-
-AWS.config.update({
-  accessKeyId: process.env.SES_ACCESS_KEY_ID,
-  secretAccessKey: process.env.SES_SECRET_ACCESS_KEY,
-  region: 'eu-west-1',
-});
 
 @Injectable()
 export class MailService {
   private transporter: nodemailer.Transporter;
 
-  constructor() {
+  constructor(private configService: ConfigService) {
+    AWS.config.update({
+      accessKeyId: this.configService.get('SES_ACCESS_KEY_ID'),
+      secretAccessKey: this.configService.get('SES_SECRET_ACCESS_KEY'),
+      region: 'eu-west-1',
+    });
+
     this.transporter = nodemailer.createTransport({
       SES: new AWS.SES({
         apiVersion: '2010-12-01',

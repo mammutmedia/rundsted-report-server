@@ -7,6 +7,7 @@ import { CreateReportDto } from './dtos/createPdf.dto';
 import { CleanDataDto } from './dtos/cleanData.dto';
 /* fs */
 import * as fs from 'fs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PdfService {
@@ -15,6 +16,7 @@ export class PdfService {
     private buildPdfService: BuildPdfService,
     private s3Service: S3Service,
     private mailService: MailService,
+    private configService: ConfigService,
   ) {}
   async createPdf(data: CreateReportDto) {
     /* clean data Service */
@@ -26,7 +28,7 @@ export class PdfService {
     /* Upload PDF to S3 Service */
     /* this.s3Service.uploadPdf(data); */
 
-    if (process.env.NODE_ENV === 'production') {
+    if (this.configService.get('NODE_ENV') === 'production') {
       fs.unlink(filename, (err) => {
         if (err) {
           console.error('Failed to delete the report file: ', err);
