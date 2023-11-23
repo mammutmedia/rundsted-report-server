@@ -96,13 +96,13 @@ export class BuildPdfService {
       lang,
       `${PDF_LOCATION}page-10.png`,
     );
-    await this.page11Service.addContentToPage(
+    /*   await this.page11Service.addContentToPage(
       doc,
       klientMap,
       stakeholderMap,
       lang,
       `${PDF_LOCATION}page-11.png`,
-    );
+    ); */
     await this.page12Service.addContentToPage(
       doc,
       klientMap,
