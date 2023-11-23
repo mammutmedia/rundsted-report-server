@@ -7,9 +7,11 @@ import { CreateReportDto } from './dtos/createPdf.dto';
 import { CleanDataDto } from './dtos/cleanData.dto';
 /* fs */
 import * as fs from 'fs';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class PdfService {
+  private readonly logger = new Logger(PdfService.name);
   constructor(
     private cleanDataService: CleanDataService,
     private buildPdfService: BuildPdfService,
@@ -20,7 +22,7 @@ export class PdfService {
     /* clean data Service */
     const { language, email } = data;
     const cleanedData: CleanDataDto = this.cleanDataService.cleanData(data);
-    console.log('cleanedData: ', cleanedData);
+    this.logger.log(`Data passed to myMethod: ${JSON.stringify(cleanedData)}`);
 
     /* Build PDf Service */
     const filename = await this.buildPdfService.buildPdf(cleanedData, language);
