@@ -30,7 +30,6 @@ export class Page11Service {
       this.page10Service.extractSkillRatingPairs(klientMap, language),
     );
 
-    console.log('sorted skillsKlient:', skillsKlient);
     const skillsStakeholder = this.sortSkills(
       this.page10Service.extractSkillRatingPairs(stakeholderMap, language),
     );

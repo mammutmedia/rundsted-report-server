@@ -20,7 +20,6 @@ export class PdfService {
     /* clean data Service */
     const { language, email } = data;
     const cleanedData: CleanDataDto = this.cleanDataService.cleanData(data);
-    console.log('data:', cleanedData);
     /* Build PDf Service */
     const filename = await this.buildPdfService.buildPdf(cleanedData, language);
     await this.mailService.sendMail(email, filename);

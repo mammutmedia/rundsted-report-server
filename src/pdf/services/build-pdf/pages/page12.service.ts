@@ -21,7 +21,6 @@ export class Page12Service {
       klientMap,
       language,
     );
-    console.log(highest, lowest);
     doc.fontSize(11);
     doc.fillColor('#696969');
     doc.text(highest.kompetenz, 240, 219);
