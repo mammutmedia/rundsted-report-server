@@ -11,6 +11,6 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   controllers: [PdfController],
   providers: [PdfService, CleanDataService, S3Service, MailService],
-  imports: [ChartModule, BuildPdfModule, ConfigModule.forRoot()],
+  imports: [ChartModule, BuildPdfModule],
 })
 export class PdfModule {}

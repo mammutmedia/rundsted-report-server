@@ -8,22 +8,21 @@ export class MailService {
   private transporter: nodemailer.Transporter;
 
   constructor(private configService: ConfigService) {
-    console.log(this.configService.get('AWS_ACCESS_KEY_ID'));
-    console.log(this.configService.get('AWS_SECRET_ACCESS_KEY'));
+    const accessKeyId = this.configService.get('AWS_ACCESS_KEY_ID');
+    const secretAccessKey = this.configService.get('AWS_SECRET_ACCESS_KEY');
     AWS.config.update({
-      accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-      secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+      accessKeyId,
+      secretAccessKey,
       region: 'eu-west-1',
     });
+  }
 
+  async sendMail(email: string, report: string) {
     this.transporter = nodemailer.createTransport({
       SES: new AWS.SES({
         apiVersion: '2010-12-01',
       }),
     });
-  }
-
-  async sendMail(email: string, report: string) {
     const mailOptions = {
       from: 'no-reply@newcareer.ch',
       to: email,

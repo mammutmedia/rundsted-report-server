@@ -27,16 +27,13 @@ export class PdfService {
     await this.mailService.sendMail(email, filename);
     /* Upload PDF to S3 Service */
     /* this.s3Service.uploadPdf(data); */
-
-    if (this.configService.get('NODE_ENV') === 'production') {
-      fs.unlink(filename, (err) => {
-        if (err) {
-          console.error('Failed to delete the report file: ', err);
-        } else {
-          console.log('Report file deleted successfully');
-        }
-      });
-    }
+    fs.unlink(filename, (err) => {
+      if (err) {
+        console.error('Failed to delete the report file: ', err);
+      } else {
+        console.log('Report file deleted successfully');
+      }
+    });
     return 'This action returns the pdf';
   }
 }
