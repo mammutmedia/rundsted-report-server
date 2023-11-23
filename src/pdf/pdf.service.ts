@@ -18,12 +18,12 @@ export class PdfService {
   ) {}
   async createPdf(data: CreateReportDto) {
     /* clean data Service */
-    const { language } = data;
+    const { language, email } = data;
     const cleanedData: CleanDataDto = this.cleanDataService.cleanData(data);
 
     /* Build PDf Service */
     const filename = await this.buildPdfService.buildPdf(cleanedData, language);
-    await this.mailService.sendMail('jowid100@gmail.com', filename);
+    await this.mailService.sendMail(email, filename);
     /* Upload PDF to S3 Service */
     /* this.s3Service.uploadPdf(data); */
 

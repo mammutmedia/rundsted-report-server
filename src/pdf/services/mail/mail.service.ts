@@ -1,5 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import * as AWS from 'aws-sdk';
+
+AWS.config.update({
+  accessKeyId: process.env.SES_ACCESS_KEY_ID,
+  secretAccessKey: process.env.SES_SECRET_ACCESS_KEY,
+  region: 'eu-west-1',
+});
 
 @Injectable()
 export class MailService {
@@ -7,18 +14,15 @@ export class MailService {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      auth: {
-        user: 'grayce.bosco@ethereal.email',
-        pass: 'TVAWg9ShQnGRzxgTvJ',
-      },
+      SES: new AWS.SES({
+        apiVersion: '2010-12-01',
+      }),
     });
   }
 
   async sendMail(email: string, report: string) {
     const mailOptions = {
-      from: 'grayce.bosco@ethereal.email',
+      from: 'no-reply@newcareer.ch',
       to: email,
       subject: 'Your Report',
       text: 'Here is your report',
