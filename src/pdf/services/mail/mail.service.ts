@@ -13,9 +13,6 @@ export class MailService {
   private transporter: nodemailer.Transporter;
 
   constructor() {
-    console.log(process.env.AWS_ACCESS_KEY_ID);
-    console.log(process.env.AWS_SECRET_ACCESS_KEY);
-
     this.transporter = nodemailer.createTransport({
       SES: new AWS.SES({
         apiVersion: '2010-12-01',
