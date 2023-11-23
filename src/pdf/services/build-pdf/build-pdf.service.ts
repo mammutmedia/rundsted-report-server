@@ -20,7 +20,7 @@ export class BuildPdfService {
     private readonly page8Service: Page8Service,
     private readonly page9Service: Page9Service,
     private readonly page10Service: Page10Service,
-    private readonly page11Service: Page11Service,
+    /* private readonly page11Service: Page11Service, */
     private readonly page12Service: Page12Service,
   ) {}
 
