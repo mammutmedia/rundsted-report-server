@@ -9,8 +9,8 @@ export class MailService {
 
   constructor(private configService: ConfigService) {
     AWS.config.update({
-      accessKeyId: this.configService.get('SES_ACCESS_KEY_ID'),
-      secretAccessKey: this.configService.get('SES_SECRET_ACCESS_KEY'),
+      accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+      secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
       region: 'eu-west-1',
     });
 
