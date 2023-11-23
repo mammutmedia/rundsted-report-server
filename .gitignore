@@ -39,3 +39,4 @@ lerna-debug.log*
 report*.pdf
 
 .env
+*.env

@@ -4,7 +4,7 @@ import { HomeController } from './home/home.controller';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PdfModule, ConfigModule.forRoot({ isGlobal: true })],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), PdfModule],
   controllers: [HomeController],
   providers: [],
 })
