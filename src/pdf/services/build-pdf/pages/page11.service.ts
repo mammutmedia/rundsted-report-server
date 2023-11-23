@@ -105,7 +105,11 @@ export class Page11Service {
   }
 
   private stringSort(a: any, b: any) {
-    return a.skill.localeCompare(b.skill);
+    if (a && a.skill && b && b.skill) {
+      return a.skill.localeCompare(b.skill);
+    }
+    return 0;
+    /* return a.skill.localeCompare(b.skill); */
   }
 
   private sortByDifference(data) {

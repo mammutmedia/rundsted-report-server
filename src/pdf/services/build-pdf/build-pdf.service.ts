@@ -20,7 +20,7 @@ export class BuildPdfService {
     private readonly page8Service: Page8Service,
     private readonly page9Service: Page9Service,
     private readonly page10Service: Page10Service,
-    /* private readonly page11Service: Page11Service, */
+    private readonly page11Service: Page11Service,
     private readonly page12Service: Page12Service,
   ) {}
 
@@ -96,13 +96,13 @@ export class BuildPdfService {
       lang,
       `${PDF_LOCATION}page-10.png`,
     );
-    /*   await this.page11Service.addContentToPage(
+    await this.page11Service.addContentToPage(
       doc,
       klientMap,
       stakeholderMap,
       lang,
       `${PDF_LOCATION}page-11.png`,
-    ); */
+    );
     await this.page12Service.addContentToPage(
       doc,
       klientMap,
