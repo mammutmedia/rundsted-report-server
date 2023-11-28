@@ -41,7 +41,7 @@ export class ChartUtilityService {
       scales: {
         y: {
           afterFit: function (scaleInstance) {
-            scaleInstance.width = 430; // sets the width to 100px
+            scaleInstance.width = 500; // Sets width of Labels
           },
           ticks: {
             font: {
