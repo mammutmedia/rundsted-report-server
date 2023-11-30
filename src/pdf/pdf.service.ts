@@ -7,23 +7,24 @@ import { CreateReportDto } from './dtos/createPdf.dto';
 import { CleanDataDto } from './dtos/cleanData.dto';
 /* fs */
 import * as fs from 'fs';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PdfService {
   constructor(
     private cleanDataService: CleanDataService,
     private buildPdfService: BuildPdfService,
-    private s3Service: S3Service,
     private mailService: MailService,
-    private configService: ConfigService,
   ) {}
   async createPdf(data: CreateReportDto) {
     /* clean data Service */
-    const { language, email } = data;
+    const { language, email, name } = data;
     const cleanedData: CleanDataDto = this.cleanDataService.cleanData(data);
     /* Build PDf Service */
-    const filename = await this.buildPdfService.buildPdf(cleanedData, language);
+    const filename = await this.buildPdfService.buildPdf(
+      cleanedData,
+      language,
+      name,
+    );
     await this.mailService.sendMail(email, filename);
     /* Upload PDF to S3 Service */
     /* this.s3Service.uploadPdf(data); */

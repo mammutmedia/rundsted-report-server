@@ -3,6 +3,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ChartOptions } from 'chart.js';
 import { ChartFactory } from './chart.factory';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Injectable()
 export class ChartUtilityService {
@@ -24,12 +25,20 @@ export class ChartUtilityService {
           data: klientSkills,
           barThickness: 30,
           backgroundColor: this.KLIENT_COLOR,
+          datalabels: {
+            align: 'end',
+            anchor: 'start',
+          },
         },
         {
           label: 'Stakeholder',
           data: stakeholderSkills,
           barThickness: 30,
           backgroundColor: this.STAKEHOLDER_COLOR,
+          datalabels: {
+            align: 'end',
+            anchor: 'start',
+          },
         },
       ],
     };
@@ -57,6 +66,16 @@ export class ChartUtilityService {
       plugins: {
         legend: {
           display: false,
+        },
+        datalabels: {
+          color: 'white',
+          display(context: any): boolean {
+            return true;
+          },
+          font: {
+            weight: 'bold',
+          },
+          formatter: Math.round,
         },
       },
     };

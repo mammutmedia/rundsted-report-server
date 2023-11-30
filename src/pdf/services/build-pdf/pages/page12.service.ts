@@ -21,9 +21,9 @@ export class Page12Service {
       klientMap,
       language,
     );
-    doc.fontSize(11);
+    doc.fontSize(10);
     doc.fillColor('#696969');
-    doc.text(highest.kompetenz, 240, 219);
+    doc.text(highest.kompetenz, 240, 218);
     doc.text(lowest.kompetenz, 240, 237);
   }
 

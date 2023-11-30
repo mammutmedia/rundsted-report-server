@@ -32,6 +32,9 @@ class BaseChartStrategy implements IChartStrategy {
       width: width ?? 500, //px
       height: height ?? 500, //px
       backgroundColour: 'transparent',
+      /*  plugins: {
+        requireLegacy: ['chartjs-plugin-datalabels'],
+      }, */
     });
 
     const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);

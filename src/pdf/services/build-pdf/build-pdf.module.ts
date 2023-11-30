@@ -10,9 +10,11 @@ import { Page9Service } from './pages/page9.service';
 import { Page10Service } from './pages/page10.service';
 import { Page11Service } from './pages/page11.service';
 import { Page12Service } from './pages/page12.service';
+import { Page1Service } from './pages/page1.service';
 
 @Module({
   providers: [
+    Page1Service,
     Page5Service,
     Page6Service,
     Page7Service,

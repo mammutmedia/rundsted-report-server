@@ -10,10 +10,12 @@ import { Page9Service } from './pages/page9.service';
 import { Page10Service } from './pages/page10.service';
 import { Page11Service } from './pages/page11.service';
 import { Page12Service } from './pages/page12.service';
+import { Page1Service } from './pages/page1.service';
 
 @Injectable()
 export class BuildPdfService {
   constructor(
+    private readonly page1Service: Page1Service,
     private readonly page5Service: Page5Service,
     private readonly page6Service: Page6Service,
     private readonly page7Service: Page7Service,
@@ -24,8 +26,8 @@ export class BuildPdfService {
     private readonly page12Service: Page12Service,
   ) {}
 
-  private addImageToPage(doc: PDFDocument, imagePath: string, page?: number) {
-    if (page !== 1) doc.addPage();
+  private addImageToPage(doc: PDFDocument, imagePath: string) {
+    doc.addPage();
     doc.image(imagePath, 0, 0, {
       width: 620,
       height: 842,
@@ -38,19 +40,23 @@ export class BuildPdfService {
     }, {});
   }
 
-  async buildPdf(cleanData: CleanDataDto, lang: Language) {
+  async buildPdf(cleanData: CleanDataDto, lang: Language, name: string) {
     const { klient, stakeholder } = cleanData;
     const klientMap = this._transformToMap(klient);
     const stakeholderMap = this._transformToMap(stakeholder);
     const doc = new PDFDocument({ margin: 0, size: 'A4' });
-    doc.fontSize(9);
     const PDF_LOCATION = `./src/pdf/services/build-pdf/pdf/${lang}/`;
 
     const filename = `report-${new Date().valueOf()}.pdf`;
     const writeStream = fs.createWriteStream(filename);
     doc.pipe(writeStream);
 
-    this.addImageToPage(doc, `${PDF_LOCATION}page-01.png`, 1);
+    await this.page1Service.addContentToPage(
+      doc,
+      name,
+      `${PDF_LOCATION}page-01.png`,
+    );
+    doc.fontSize(9);
     this.addImageToPage(doc, `${PDF_LOCATION}page-02.png`);
     this.addImageToPage(doc, `${PDF_LOCATION}page-03.png`);
     this.addImageToPage(doc, `${PDF_LOCATION}page-04.png`);

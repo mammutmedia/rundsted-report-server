@@ -43,4 +43,5 @@ export class CreateReportDto {
   stakeholder: StakeholderDto[];
   language: Language;
   email: string;
+  name: string;
 }

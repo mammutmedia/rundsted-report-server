@@ -53,28 +53,51 @@ export class Page6Service {
 
   private createBarChartE4FIndex(doc, klientMap, stakeholderMap) {
     const klientAverage = this.calculateAverageOfAverages(klientMap);
+    const klientBarLength = this.calculateBarLength(klientAverage);
     const stakeholderAverage = this.calculateAverageOfAverages(stakeholderMap);
+    const stakeholderBarLength = this.calculateBarLength(stakeholderAverage);
     doc.lineWidth(20);
-    const X_POS_LABEL = 260;
+    const X_START = 63;
+    const Y_STAKEHOLDER = 642;
+    const Y_KLIENT = 665;
+    const X_END_STAKEHOLDER = X_START + stakeholderBarLength;
+    const X_END_KLIENT = X_START + klientBarLength;
+
+    // X_END_KLIENT - X_START = 470
 
     // line cap settings (x, y)
     doc
       .lineCap('butt')
-      .moveTo(63, 632)
-      .lineTo(300, 632)
+      .moveTo(X_START, Y_STAKEHOLDER)
+      .lineTo(X_END_STAKEHOLDER, Y_STAKEHOLDER)
       .fillAndStroke(this.STAKEHOLDER_COLOR, this.STAKEHOLDER_COLOR);
 
     doc
       .lineCap('butt')
-      .moveTo(63, 665)
-      .lineTo(466, 665)
+      .moveTo(X_START, Y_KLIENT)
+      .lineTo(X_END_KLIENT, Y_KLIENT)
       .fillAndStroke(this.KLIENT_COLOR, this.KLIENT_COLOR);
+
+    const X_POS_LABEL_STAKEHOLDER = X_END_STAKEHOLDER - 40;
+    const X_POS_LABEL_KLIENT = X_END_KLIENT - 25;
+    const X_POS_SCORE_STAKEHOLDER = X_END_STAKEHOLDER + 10;
+    const X_POS_SCORE_KLIENT = X_END_KLIENT + 10;
 
     doc.fillColor('#ffffff');
     doc.fontSize(6);
     doc.font('Helvetica-Bold');
-    doc.text('Stakeholder', X_POS_LABEL, 630);
-    doc.text('Klient', X_POS_LABEL + 15, 663);
+    doc.text('Stakeholder', X_POS_LABEL_STAKEHOLDER, 640);
+    doc.text('Client', X_POS_LABEL_KLIENT, 663);
+    doc.fillColor('#696969');
+    doc.text(stakeholderAverage, X_POS_SCORE_STAKEHOLDER, 640);
+    doc.text(klientAverage, X_POS_SCORE_KLIENT, 663);
+    doc.font('Helvetica');
+  }
+
+  private calculateBarLength(rating) {
+    const faktor = 470 / 4;
+    const auffuellung = Math.max(0, Math.min(470, (rating - 1) * faktor));
+    return auffuellung;
   }
 
   private addDoughnutCharts(
