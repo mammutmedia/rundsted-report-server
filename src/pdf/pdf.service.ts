@@ -18,6 +18,9 @@ export class PdfService {
   async createPdf(data: CreateReportDto) {
     /* clean data Service */
     const { language, email, name } = data;
+
+    console.log(name);
+
     const cleanedData: CleanDataDto = this.cleanDataService.cleanData(data);
     /* Build PDf Service */
     const filename = await this.buildPdfService.buildPdf(
