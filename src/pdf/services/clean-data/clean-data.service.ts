@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { KompetenzDto } from 'src/pdf/dtos/kompetenz.dto';
 import { round } from 'lodash';
 import { CreateReportDto } from 'src/pdf/dtos/createPdf.dto';
+import { Console } from 'console';
 
 @Injectable()
 export class CleanDataService {
@@ -24,6 +25,7 @@ export class CleanDataService {
     const cleanedStakeholders = stakeholder.map((s) =>
       this.extractKlientData(s),
     );
+
     const numberStakeholder = cleanedStakeholders.length;
 
     const universalStakeholder = cleanedStakeholders.reduce((acc, curr) => {
@@ -53,23 +55,29 @@ export class CleanDataService {
               };
             }
 
-            /* Bilde den AverageStakeholder */
-            const alignedSkillRating = Number(rating) / numberStakeholder;
-            acc[kompetenz].skills[skillName].rating = round(
-              acc[kompetenz].skills[skillName].rating +
-                Number(rating) / numberStakeholder,
-              1,
-            );
-            const alignedSkillRatingForAverage = alignedSkillRating / 5;
-            acc[kompetenz].averageRating = round(
-              acc[kompetenz].averageRating + alignedSkillRatingForAverage,
-              1,
-            );
+            /* Add the ratings need in next step calculate the average  */
+            acc[kompetenz].skills[skillName].rating += Number(rating);
+            acc[kompetenz].averageRating += Number(rating);
           },
         );
       });
       return acc;
     }, {});
+
+    /* Calculate the averages of Skills and Kompetenzrating  */
+    Object.keys(universalStakeholder).forEach((key) => {
+      const { skills, averageRating } = universalStakeholder[key];
+      const averageRatingPerKompetenz = averageRating / (numberStakeholder * 5);
+      universalStakeholder[key].averageRating = round(
+        averageRatingPerKompetenz,
+        2,
+      );
+      Object.keys(skills).forEach((skill) => {
+        const { rating } = skills[skill];
+        const averageRatingPerSkill = rating / numberStakeholder;
+        skills[skill].rating = round(averageRatingPerSkill, 2);
+      });
+    });
 
     const arrayOfObjects: KompetenzDto[] =
       this.createArrayOfObjects(universalStakeholder);
