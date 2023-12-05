@@ -1,18 +1,27 @@
 import { PDFDocument } from 'pdfkit';
 import { Inject, Injectable } from '@nestjs/common';
 import { PageService } from '../page.interface';
+import { round } from 'lodash';
 import { ChartUtilityService } from '../../create-charts/chart-utility.service';
+import { round1Decimal } from '../../clean-data/helper';
 
 @Injectable()
 export class Page6Service {
   readonly KLIENT_COLOR = '#382d73';
   readonly STAKEHOLDER_COLOR = '#d5453c';
+  readonly CLIENT_TRANSLATE = {
+    de: 'Klient/in',
+    en: 'Client',
+    fr: 'Client',
+    it: 'Client',
+  };
 
   constructor(private readonly chartUtilityService: ChartUtilityService) {}
   async addContentToPage(
     doc: PDFDocument,
     klientMap: CompetenceData,
     stakeholderMap: CompetenceData,
+    lang,
     PDF_LOCATION: string,
   ) {
     doc.addPage().image(PDF_LOCATION, 0, 0, {
@@ -31,7 +40,7 @@ export class Page6Service {
     for (const key of Object.keys(klientMap)) {
       const { averageRating, percentage } = klientMap[key];
       const delta = 100 - percentage;
-      doc.text(averageRating, X_POS_RATING, yPos);
+      doc.text(averageRating.toFixed(1), X_POS_RATING, yPos);
       doc.text(percentage, X_POS_PERCENTAGE, yPos);
       doc.text(delta, X_POS_DELTA, yPos);
       yPos += LINE_HEIGHT;
@@ -46,12 +55,12 @@ export class Page6Service {
     );
     doc.image(barChart, 50, 638, { width: 425, height: 60 }); */
 
-    this.createBarChartE4FIndex(doc, klientMap, stakeholderMap);
+    this.createBarChartE4FIndex(doc, klientMap, stakeholderMap, lang);
 
     return;
   }
 
-  private createBarChartE4FIndex(doc, klientMap, stakeholderMap) {
+  private createBarChartE4FIndex(doc, klientMap, stakeholderMap, lang) {
     const klientAverage = this.calculateAverageOfAverages(klientMap);
     const klientBarLength = this.calculateBarLength(klientAverage);
     const stakeholderAverage = this.calculateAverageOfAverages(stakeholderMap);
@@ -87,10 +96,14 @@ export class Page6Service {
     doc.fontSize(6);
     doc.font('Helvetica-Bold');
     doc.text('Stakeholder', X_POS_LABEL_STAKEHOLDER, 640);
-    doc.text('Client', X_POS_LABEL_KLIENT, 663);
+    doc.text(this.CLIENT_TRANSLATE[lang], X_POS_LABEL_KLIENT, 663);
     doc.fillColor('#696969');
-    doc.text(stakeholderAverage, X_POS_SCORE_STAKEHOLDER, 640);
-    doc.text(klientAverage, X_POS_SCORE_KLIENT, 663);
+    doc.text(
+      round1Decimal(stakeholderAverage).toFixed(1),
+      X_POS_SCORE_STAKEHOLDER,
+      640,
+    );
+    doc.text(round1Decimal(klientAverage).toFixed(1), X_POS_SCORE_KLIENT, 663);
     doc.font('Helvetica');
   }
 
@@ -208,7 +221,7 @@ export class Page6Service {
       numCompetences++;
     }
 
-    const averageOfAverages = totalAverage / numCompetences;
-    return averageOfAverages;
+    const averageOfAverages = (totalAverage / numCompetences).toFixed(2);
+    return round(averageOfAverages, 2);
   }
 }

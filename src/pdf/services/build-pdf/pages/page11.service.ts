@@ -66,9 +66,7 @@ export class Page11Service {
 
       if (klientRating === stakeRating) continue;
 
-      const difference = parseFloat(
-        Math.abs(klientRating - stakeRating).toFixed(2),
-      );
+      const difference = Math.abs(klientRating - stakeRating).toFixed(1);
 
       const skillObj = { skill: klientSkill, difference };
 

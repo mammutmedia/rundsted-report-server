@@ -40,14 +40,14 @@ export class Page10Service {
       this.renderSkillRatingPair(
         doc,
         klientSkill,
-        klientRating,
+        klientRating.toFixed(1),
         this.X_POS_KLIENT,
         yPos,
       );
       this.renderSkillRatingPair(
         doc,
         stakeSkill,
-        stakeRating,
+        stakeRating.toFixed(1),
         this.X_POS_STAKEHOLDER,
         yPos,
       );

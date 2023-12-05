@@ -28,9 +28,13 @@ export class Page5Service {
     const X_POS_STAKEHOLDER = 380;
     for (const key of Object.keys(klientMap)) {
       /* klient column */
-      doc.text(klientMap[key].averageRating, X_POS_KLIENT, yPos);
+      doc.text(klientMap[key].averageRating.toFixed(1), X_POS_KLIENT, yPos);
       /* stakeholder column */
-      doc.text(stakeholderMap[key].averageRating, X_POS_STAKEHOLDER, yPos);
+      doc.text(
+        stakeholderMap[key].averageRating.toFixed(1),
+        X_POS_STAKEHOLDER,
+        yPos,
+      );
       yPos += LINE_HEIGHT;
     }
   }

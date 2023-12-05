@@ -3,6 +3,7 @@ import { KompetenzDto } from 'src/pdf/dtos/kompetenz.dto';
 import { round } from 'lodash';
 import { CreateReportDto } from 'src/pdf/dtos/createPdf.dto';
 import { Console } from 'console';
+import { round1Decimal } from './helper';
 
 @Injectable()
 export class CleanDataService {
@@ -68,14 +69,13 @@ export class CleanDataService {
     Object.keys(universalStakeholder).forEach((key) => {
       const { skills, averageRating } = universalStakeholder[key];
       const averageRatingPerKompetenz = averageRating / (numberStakeholder * 5);
-      universalStakeholder[key].averageRating = round(
+      universalStakeholder[key].averageRating = round1Decimal(
         averageRatingPerKompetenz,
-        2,
       );
       Object.keys(skills).forEach((skill) => {
         const { rating } = skills[skill];
         const averageRatingPerSkill = rating / numberStakeholder;
-        skills[skill].rating = round(averageRatingPerSkill, 2);
+        skills[skill].rating = round1Decimal(averageRatingPerSkill);
       });
     });
 
@@ -113,10 +113,11 @@ export class CleanDataService {
 
       return acc;
     }, {});
+
     Object.keys(KompetenzMapKlient).forEach((key) => {
       const { skills, sum } = KompetenzMapKlient[key];
       const averageRating = sum / Object.keys(skills).length;
-      KompetenzMapKlient[key].averageRating = averageRating;
+      KompetenzMapKlient[key].averageRating = round1Decimal(averageRating);
     });
 
     const arrayOfObjects: KompetenzDto[] =

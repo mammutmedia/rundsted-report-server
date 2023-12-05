@@ -72,6 +72,7 @@ export class BuildPdfService {
       doc,
       klientMap,
       stakeholderMap,
+      lang,
       `${PDF_LOCATION}page-06.png`,
     );
     await this.page7Service.addContentToPage(
