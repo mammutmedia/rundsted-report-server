@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { KompetenzDto } from 'src/pdf/dtos/kompetenz.dto';
 import { round } from 'lodash';
 import { CreateReportDto } from 'src/pdf/dtos/createPdf.dto';
-import { Console } from 'console';
 import { round1Decimal } from './helper';
 
 @Injectable()

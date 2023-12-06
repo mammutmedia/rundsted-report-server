@@ -26,7 +26,16 @@ export class Page5Service {
     const LINE_HEIGHT = 15;
     const X_POS_KLIENT = 330;
     const X_POS_STAKEHOLDER = 380;
-    for (const key of Object.keys(klientMap)) {
+
+    const keyOrder = [
+      'Problem solving',
+      'Learning Agility',
+      'Digital literacy',
+      'Ecosystem-Management',
+      'Enterprising mindset',
+    ];
+    // Iterate through the keys in the specified order
+    for (const key of keyOrder) {
       /* klient column */
       doc.text(klientMap[key].averageRating.toFixed(1), X_POS_KLIENT, yPos);
       /* stakeholder column */
