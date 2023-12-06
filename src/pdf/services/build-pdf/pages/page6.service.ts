@@ -108,8 +108,12 @@ export class Page6Service {
   }
 
   private calculateBarLength(rating) {
+    const rounded_rating = Number(round1Decimal(rating).toFixed(1));
     const faktor = 470 / 4;
-    const auffuellung = Math.max(0, Math.min(470, (rating - 1) * faktor));
+    const auffuellung = Math.max(
+      0,
+      Math.min(470, (rounded_rating - 1) * faktor),
+    );
     return auffuellung;
   }
 
