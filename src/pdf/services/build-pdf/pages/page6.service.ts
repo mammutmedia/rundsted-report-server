@@ -10,10 +10,17 @@ export class Page6Service {
   readonly KLIENT_COLOR = '#382d73';
   readonly STAKEHOLDER_COLOR = '#d5453c';
   readonly CLIENT_TRANSLATE = {
-    de: 'Klient/in',
-    en: 'Client',
-    fr: 'Client',
-    it: 'Client',
+    de: 'KLIENT/IN',
+    en: 'CLIENT',
+    fr: 'VOUS',
+    it: 'LEI',
+  };
+
+  readonly STAKEHOLDER_TRANSLATE = {
+    de: 'STAKEHOLDER',
+    en: 'STAKEHOLDER',
+    fr: 'PAIRS',
+    it: 'STAKEHOLDER',
   };
 
   constructor(private readonly chartUtilityService: ChartUtilityService) {}
@@ -95,7 +102,7 @@ export class Page6Service {
     doc.fillColor('#ffffff');
     doc.fontSize(6);
     doc.font('Helvetica-Bold');
-    doc.text('Stakeholder', X_POS_LABEL_STAKEHOLDER, 640);
+    doc.text(this.STAKEHOLDER_TRANSLATE[lang], X_POS_LABEL_STAKEHOLDER, 640);
     doc.text(this.CLIENT_TRANSLATE[lang], X_POS_LABEL_KLIENT, 663);
     doc.fillColor('#696969');
     doc.text(

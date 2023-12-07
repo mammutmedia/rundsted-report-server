@@ -118,7 +118,7 @@ export class Page11Service {
       return {
         de: `in ${count} Fällen`,
         en: `in ${count} cases`,
-        fr: `dans ${count} cas`,
+        fr: `en ${count} cases`,
         it: `in ${count} casi`,
       };
     };
