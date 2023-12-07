@@ -21,10 +21,16 @@ export class Page12Service {
       klientMap,
       language,
     );
+    const margin_x_by_language = {
+      de: 0,
+      en: 0,
+      fr: 80,
+      it: 30,
+    };
     doc.fontSize(10);
     doc.fillColor('#696969');
-    doc.text(highest.kompetenz, 240, 218);
-    doc.text(lowest.kompetenz, 240, 237);
+    doc.text(highest.kompetenz, 240 + margin_x_by_language[language], 218);
+    doc.text(lowest.kompetenz, 240 + margin_x_by_language[language], 237);
   }
 
   findHighestLowestAverageRating(data, language: Language) {
