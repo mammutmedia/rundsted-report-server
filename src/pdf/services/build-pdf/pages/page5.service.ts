@@ -24,7 +24,7 @@ export class Page5Service {
 
     let yPos = 235;
     const LINE_HEIGHT = 15;
-    const X_POS_KLIENT = 330;
+    const X_POS_KLIENT = 320;
     const X_POS_STAKEHOLDER = 380;
 
     const keyOrder = [
