@@ -94,7 +94,7 @@ export class Page6Service {
       .lineTo(X_END_KLIENT, Y_KLIENT)
       .fillAndStroke(this.KLIENT_COLOR, this.KLIENT_COLOR);
 
-    const X_POS_LABEL_STAKEHOLDER = X_END_STAKEHOLDER - 40;
+    const X_POS_LABEL_STAKEHOLDER = X_END_STAKEHOLDER - 50;
     const X_POS_LABEL_KLIENT = X_END_KLIENT - 25;
     const X_POS_SCORE_STAKEHOLDER = X_END_STAKEHOLDER + 10;
     const X_POS_SCORE_KLIENT = X_END_KLIENT + 10;
