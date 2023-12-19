@@ -12,7 +12,7 @@ async function bootstrap() {
       'https://master.d3ghxgyq2aspf9.amplifyapp.com',
       'http://localhost:3000',
     ],
-    methods: 'GET, POST',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
   app.use(bodyParser.json({ limit: '50mb' }));
