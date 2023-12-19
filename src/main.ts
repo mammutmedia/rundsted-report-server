@@ -6,7 +6,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn', 'log'],
   });
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'https://www.e4f-rundstedt.ch/',
+      'https://master.d3ghxgyq2aspf9.amplifyapp.com',
+      'http://localhost:3000',
+    ],
+    methods: 'GET, POST',
+    credentials: true,
+  });
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   await app.listen(1337);
