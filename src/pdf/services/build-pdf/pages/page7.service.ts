@@ -58,7 +58,6 @@ export class Page7Service {
       // @ts-ignore
       (data) => data.rating,
     );
-    console.log(klientSkillsRating);
     const stakeholderSkillsRating = Object.values(sortedStakeholderSkills).map(
       // @ts-ignore
       (data) => data.rating,
