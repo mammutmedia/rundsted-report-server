@@ -7,11 +7,7 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log'],
   });
   app.enableCors({
-    origin: [
-      'https://www.e4f-rundstedt.ch/',
-      'https://master.d3ghxgyq2aspf9.amplifyapp.com',
-      'http://localhost:3000',
-    ],
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
