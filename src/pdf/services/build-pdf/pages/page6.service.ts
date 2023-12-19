@@ -44,7 +44,16 @@ export class Page6Service {
     const X_POS_RATING = 330;
     const X_POS_PERCENTAGE = 370;
     const X_POS_DELTA = 420;
-    for (const key of Object.keys(klientMap)) {
+
+    const keyOrder = [
+      'Problem solving',
+      'Learning Agility',
+      'Digital literacy',
+      'Ecosystem-Management',
+      'Enterprising mindset',
+    ];
+
+    for (const key of keyOrder) {
       const { averageRating, percentage } = klientMap[key];
       const delta = 100 - percentage;
       doc.text(averageRating.toFixed(1), X_POS_RATING, yPos);
