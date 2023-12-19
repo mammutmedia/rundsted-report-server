@@ -50,12 +50,16 @@ export class Page7Service {
   }
 
   extractChartData(klientSkills, stakeholderSkills, lang) {
-    const labels = this.extractSkillNamesByLanguage(klientSkills, lang);
-    const klientSkillsRating = Object.values(klientSkills).map(
+    // sort to guarantee the same order in chart
+    const sortedKlientSkills = this.sortObjectByKey(klientSkills);
+    const sortedStakeholderSkills = this.sortObjectByKey(stakeholderSkills);
+    const labels = this.extractSkillNamesByLanguage(sortedKlientSkills, lang);
+    const klientSkillsRating = Object.values(sortedKlientSkills).map(
       // @ts-ignore
       (data) => data.rating,
     );
-    const stakeholderSkillsRating = Object.values(stakeholderSkills).map(
+    console.log(klientSkillsRating);
+    const stakeholderSkillsRating = Object.values(sortedStakeholderSkills).map(
       // @ts-ignore
       (data) => data.rating,
     );
@@ -66,6 +70,11 @@ export class Page7Service {
     };
   }
 
+  private sortObjectByKey(skillObj) {
+    return Object.fromEntries(
+      Object.entries(skillObj).sort(([a], [b]) => a.localeCompare(b)),
+    );
+  }
   private extractSkillNamesByLanguage(skillObject, language) {
     return Object.values(skillObject)
       .map((data) => data[language])
