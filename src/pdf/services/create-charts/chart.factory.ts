@@ -32,11 +32,15 @@ class BaseChartStrategy implements IChartStrategy {
       width: width ?? 500, //px
       height: height ?? 500, //px
       backgroundColour: 'transparent',
+      chartCallback: (ChartJS: any) => {
+        ChartJS.defaults.font.family = 'Lato-Light';
+        ChartJS.defaults.font.size = 16;
+      }
       /*  plugins: {
         requireLegacy: ['chartjs-plugin-datalabels'],
       }, */
     });
-
+    chartJSNodeCanvas.registerFont('./assets/chartjsNodeCanvasFont/Lato-Light.ttf', { family: 'Lato-Light' })
     const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
     return buffer;
   }
